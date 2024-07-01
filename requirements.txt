@@ -1,4 +1,4 @@
-absl-py==0.13.0 @ file:///home/conda/feedstock_root/build_artifacts/absl-py_1705494584803/work
+absl-py @ file:///home/conda/feedstock_root/build_artifacts/absl-py_1705494584803/work
 aiohttp @ file:///Users/runner/miniforge3/conda-bld/aiohttp_1713965148940/work
 aiosignal @ file:///home/conda/feedstock_root/build_artifacts/aiosignal_1667935791922/work
 altair @ file:///home/conda/feedstock_root/build_artifacts/altair-split_1711824856061/work
