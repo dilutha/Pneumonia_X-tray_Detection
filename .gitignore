@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Node
+node_modules/
+.next/
+
+# Environment
+.env
+.env.local
+
+# ML Models
+*.h5
+
+# Mac
+.DS_Store
