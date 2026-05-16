@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: pneumoscan-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    
+    # Render instance type
+    # Starter ($7/mo) — good for development/portfolio
+    # Standard ($25/mo) — recommended for production (more RAM for TensorFlow)
+    plan: standard
+    
+    # Auto-deploy on pushes to main branch
+    branch: main
+    
+    # Health check path
+    healthCheckPath: /api/v1/health
+    
+    # Environment variables (set in Render dashboard, not here)
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_ORIGINS
+        value: https://your-app.vercel.app
+      # Set these as secrets in Render dashboard:
+      # SUPABASE_URL, SUPABASE_KEY, SUPABASE_SERVICE_KEY
+    
+    # Persistent disk for model file
+    # Models are large and shouldn't be rebuilt into the Docker image
+    disk:
+      name: model-storage
+      mountPath: /app/ml_models
+      sizeGB: 5

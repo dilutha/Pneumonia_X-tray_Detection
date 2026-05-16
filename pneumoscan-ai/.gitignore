@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.venv*/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Node
+node_modules/
+.next/
+out/
+.env
+.env.local
+.env.production
+
+# ML Models (large binary — store in Git LFS or Render disk)
+*.h5
+*.keras
+*.pb
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Misc
+*.log
+temp/
+uploads/
