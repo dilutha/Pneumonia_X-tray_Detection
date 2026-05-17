@@ -112,16 +112,16 @@ export default function DashboardPage() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-400 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            CNN Model · TensorFlow · Grad-CAM
+            DenseNet121 · Transfer Learning · GradCAM
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Pneumonia Detection{" "}
             <span className="gradient-text">from X-Rays</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Upload a chest X-ray image and our deep learning model will analyze
-            it for pneumonia indicators, with visual explanations via Grad-CAM
-            heatmaps.
+            Upload a chest X-ray image and the DenseNet121 transfer learning
+            model will analyze it for pneumonia indicators, with GradCAM
+            heatmaps highlighting medically relevant attention regions.
           </p>
         </motion.div>
 
@@ -182,12 +182,12 @@ export default function DashboardPage() {
                       done: uploadState === "processing",
                     },
                     {
-                      label: "Preprocessing (resize, normalize)",
+                      label: "Preprocessing (224px DenseNet input)",
                       done: false,
                     },
-                    { label: "CNN inference", done: false },
+                    { label: "DenseNet121 inference", done: false },
                     {
-                      label: "Generating Grad-CAM heatmap",
+                      label: "Generating GradCAM heatmap",
                       done: false,
                     },
                     {
@@ -274,10 +274,10 @@ export default function DashboardPage() {
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {[
-            { label: "Model Architecture", value: "CNN" },
-            { label: "Training Dataset", value: "Chest X-Ray" },
-            { label: "Explainability", value: "Grad-CAM" },
-            { label: "Inference Time", value: "~100ms" },
+            { label: "Model Architecture", value: "DenseNet121" },
+            { label: "Training Strategy", value: "Fine-tuned" },
+            { label: "Explainability", value: "GradCAM" },
+            { label: "Input Resolution", value: "224x224" },
           ].map((stat) => (
             <div
               key={stat.label}

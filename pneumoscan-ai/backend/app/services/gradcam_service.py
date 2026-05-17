@@ -4,7 +4,7 @@ gradcam_service.py — Generates Grad-CAM heatmap visualizations.
 Improved Version:
   ✅ Fixed weak/same-image Grad-CAM issue
   ✅ Proper heatmap normalization
-  ✅ Better CNN feature weighting
+  ✅ Better DenseNet121 feature weighting
   ✅ Stronger visual contrast
   ✅ Better debugging logs
   ✅ Correct handling for binary classification
@@ -26,6 +26,7 @@ except Exception:
 import tensorflow as tf
 from PIL import Image
 
+from app.core.config import settings
 from app.utils.image_utils import (
     preprocess_image,
     bytes_to_pil,
@@ -37,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 class GradCAMService:
     """
-    Generates Grad-CAM visual explanations for CNN predictions.
+    Generates Grad-CAM visual explanations for DenseNet121 predictions.
 
     Args:
         model:
@@ -57,8 +58,14 @@ class GradCAMService:
 
         self.last_conv_layer_name = (
             last_conv_layer_name
-            or self._find_last_conv_layer()
+            or settings.gradcam_layer_name
         )
+
+        if not any(layer.name == self.last_conv_layer_name for layer in self.model.layers):
+            raise ValueError(
+                f"Grad-CAM layer '{self.last_conv_layer_name}' was not found in the loaded model. "
+                "For the DenseNet121-v2 model this must be 'conv5_block16_concat'."
+            )
 
         logger.info(
             f"✅ Grad-CAM initialized using layer: "
@@ -245,7 +252,7 @@ class GradCAMService:
     def generate_heatmap(
         self,
         file_bytes: bytes,
-        target_size: Tuple[int, int] = (150, 150),
+        target_size: Tuple[int, int] = (224, 224),
         alpha: float = 0.55,
         colormap: int = cv2.COLORMAP_JET,
     ) -> bytes:

@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]): string {
 
 /** Formats confidence as a percentage string. */
 export function formatConfidence(confidence: number): string {
-  return `${(confidence * 100).toFixed(1)}%`;
+  return `${confidence.toFixed(1)}%`;
 }
 
 /** Returns color classes based on prediction and severity. */

@@ -5,7 +5,14 @@ export const metadata: Metadata = {
   title: "PneumoScan AI — Chest X-Ray Analysis",
   description:
     "AI-powered pneumonia detection from chest X-ray images using deep learning",
-  keywords: ["pneumonia detection", "chest X-ray", "AI", "medical imaging", "CNN"],
+  keywords: [
+    "pneumonia detection",
+    "chest X-ray",
+    "DenseNet121",
+    "transfer learning",
+    "GradCAM",
+    "medical imaging",
+  ],
   authors: [{ name: "PneumoScan AI" }],
   openGraph: {
     title: "PneumoScan AI",

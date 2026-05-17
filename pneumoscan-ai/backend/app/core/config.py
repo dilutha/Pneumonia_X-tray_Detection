@@ -30,8 +30,10 @@ class Settings(BaseSettings):
         return [origin.strip().rstrip("/") for origin in self.allowed_origins.split(",") if origin.strip()]
 
     # ── ML Model ─────────────────────────────────────────────
-    model_path: str = Field(default="ml_models/pneumonia_model.h5")
-    model_input_size: int = Field(default=150)
+    model_path: str = Field(default="ml_models/densenet121_pneumonia_model.h5")
+    model_input_size: int = Field(default=224)
+    model_version: str = Field(default="DenseNet121-v2")
+    gradcam_layer_name: str = Field(default="conv5_block16_concat")
     confidence_threshold: float = Field(default=0.5)
 
     # ── Supabase ─────────────────────────────────────────────

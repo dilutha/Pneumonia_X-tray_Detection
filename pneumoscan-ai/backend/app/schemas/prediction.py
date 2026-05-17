@@ -35,7 +35,7 @@ class PredictionResponse(BaseModel):
     heatmap_url: Optional[str] = Field(None, description="Supabase Storage URL of Grad-CAM heatmap")
     processing_time_ms: float = Field(..., description="Inference time in milliseconds")
     timestamp: datetime = Field(..., description="UTC timestamp of prediction")
-    model_version: str = Field(default="v1.0", description="Which model checkpoint was used")
+    model_version: str = Field(default="DenseNet121-v2", description="Which model checkpoint was used")
 
 
 class PredictionHistoryItem(BaseModel):

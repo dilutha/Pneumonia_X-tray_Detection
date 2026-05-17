@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 class MLService:
     """
-    Manages the lifecycle of the TensorFlow/Keras CNN model.
+    Manages the lifecycle of the TensorFlow/Keras DenseNet121 model.
     
     Usage:
         ml_service = MLService()
@@ -95,7 +95,7 @@ class MLService:
             raise RuntimeError(f"Failed to load model: {e}")
 
     def _validate_model_input_shape(self) -> None:
-        """Fail fast when MODEL_INPUT_SIZE does not match the saved CNN."""
+        """Fail fast when MODEL_INPUT_SIZE does not match the saved DenseNet121 model."""
         if self.model is None:
             raise RuntimeError("Model instance is missing after load.")
 
@@ -112,7 +112,7 @@ class MLService:
             raise ValueError(
                 "Model input shape mismatch. "
                 f"Saved model expects {actual}, but settings specify {expected}. "
-                "Set MODEL_INPUT_SIZE=150 for the provided pneumonia_model.h5."
+                "Set MODEL_INPUT_SIZE=224 for the DenseNet121 transfer learning model."
             )
 
     def predict(self, file_bytes: bytes) -> Dict[str, Any]:
@@ -125,7 +125,7 @@ class MLService:
         Returns:
             dict with keys: label, confidence, raw_output
         
-        CNN output interpretation:
+        DenseNet121 output interpretation:
           - Our model has 1 output neuron with sigmoid activation
           - Output ∈ [0, 1]
           - Values closer to 1 → PNEUMONIA

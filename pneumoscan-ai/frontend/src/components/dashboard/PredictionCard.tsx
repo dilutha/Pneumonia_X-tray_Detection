@@ -167,12 +167,12 @@ export function PredictionCard({ result }: PredictionCardProps) {
                 className="space-y-2"
               >
                 <p className="text-xs text-gray-500 text-center">
-                  Grad-CAM Heatmap
+                  GradCAM Heatmap
                 </p>
                 <div className="relative">
                   <Image
                     src={result.heatmap_url}
-                    alt="Grad-CAM Heatmap"
+                    alt="GradCAM Heatmap"
                     width={320}
                     height={320}
                     unoptimized
@@ -192,7 +192,9 @@ export function PredictionCard({ result }: PredictionCardProps) {
                     ))}
                   </div>
                 </div>
-                <p className="text-xs text-gray-600 text-center">Red = high attention</p>
+                <p className="text-xs text-gray-600 text-center">
+                  Warmer regions indicate image areas that most influenced the model.
+                </p>
               </motion.div>
             )}
           </div>

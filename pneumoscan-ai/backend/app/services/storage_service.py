@@ -19,6 +19,17 @@ from app.schemas.prediction import PredictionHistoryResponse, PredictionHistoryI
 logger = logging.getLogger(__name__)
 
 
+def classify_severity(prediction: str, confidence: float) -> str:
+    """Clinical triage label tuned for better-calibrated DenseNet121 probabilities."""
+    if prediction != "PNEUMONIA":
+        return "Normal"
+    if confidence >= 0.90:
+        return "High"
+    if confidence >= 0.75:
+        return "Medium"
+    return "Low"
+
+
 def get_supabase_client() -> Client:
     """
     Creates a Supabase client using the service role key.
@@ -93,7 +104,7 @@ class StorageService:
         image_url: Optional[str],
         heatmap_url: Optional[str],
         processing_time_ms: float,
-        model_version: str = "v1.0",
+        model_version: str = settings.model_version,
     ) -> bool:
         """
         Saves a prediction record to the PostgreSQL predictions table.
@@ -105,16 +116,7 @@ class StorageService:
             return False
 
         try:
-            # Determine severity
-            if prediction == "PNEUMONIA":
-                if confidence >= 0.85:
-                    severity = "High"
-                elif confidence >= 0.65:
-                    severity = "Medium"
-                else:
-                    severity = "Low"
-            else:
-                severity = "Normal"
+            severity = classify_severity(prediction, confidence)
 
             data = {
                 "id": prediction_id,
@@ -176,7 +178,7 @@ class StorageService:
                     image_url=row.get("image_url"),
                     heatmap_url=row.get("heatmap_url"),
                     timestamp=row["created_at"],
-                    model_version=row.get("model_version", "v1.0"),
+                    model_version=row.get("model_version", settings.model_version),
                 )
                 for row in response.data
             ]

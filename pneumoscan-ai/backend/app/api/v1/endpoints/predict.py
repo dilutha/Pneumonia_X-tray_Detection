@@ -4,7 +4,7 @@ predict.py — The main prediction endpoint.
 Flow:
   1. Receive uploaded image file (multipart/form-data)
   2. Validate file type and size
-  3. Preprocess image (resize, normalize)
+  3. Preprocess image (resize, DenseNet121 preprocess_input)
   4. Run inference → prediction + confidence
   5. Generate Grad-CAM heatmap
   6. Upload image + heatmap to Supabase Storage
@@ -16,15 +16,13 @@ import uuid
 import time
 import logging
 from datetime import datetime
-from pathlib import Path
 
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request, status
-from fastapi.responses import JSONResponse
 
 from app.schemas.prediction import PredictionResponse
 from app.services.ml_service import MLService
 from app.services.gradcam_service import GradCAMService
-from app.services.storage_service import StorageService
+from app.services.storage_service import StorageService, classify_severity
 from app.core.config import settings
 from app.utils.image_utils import validate_image, save_temp_image, cleanup_temp_file
 
@@ -74,8 +72,13 @@ async def predict_pneumonia(
                 detail=f"File size {file_size_mb:.1f}MB exceeds {MAX_FILE_SIZE_MB}MB limit",
             )
         
-        # Validate it's actually an image
-        validate_image(file_bytes)
+        try:
+            validate_image(file_bytes)
+        except ValueError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=str(exc),
+            ) from exc
         
         # ── Step 2: Save temp file ─────────────────────────────
         temp_path = save_temp_image(file_bytes, prediction_id)
@@ -121,17 +124,7 @@ async def predict_pneumonia(
             processing_time_ms=processing_time,
         )
         
-        # ── Step 7: Determine severity label ───────────────────
-        # Severity helps doctors quickly triage results
-        if prediction_label == "PNEUMONIA":
-            if confidence >= 0.85:
-                severity = "High"
-            elif confidence >= 0.65:
-                severity = "Medium"
-            else:
-                severity = "Low"
-        else:
-            severity = "Normal"
+        severity = classify_severity(prediction_label, confidence)
         
         logger.info(
             f"Prediction complete | ID={prediction_id} | "
@@ -149,7 +142,7 @@ async def predict_pneumonia(
             heatmap_url=heatmap_url,
             processing_time_ms=round(processing_time, 2),
             timestamp=datetime.utcnow(),
-            model_version="v1.0",
+            model_version=settings.model_version,
         )
     
     except HTTPException:

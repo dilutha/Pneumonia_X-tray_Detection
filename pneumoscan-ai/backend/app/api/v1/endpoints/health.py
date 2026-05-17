@@ -29,6 +29,6 @@ async def health_check(request: Request) -> HealthResponse:
         status="healthy",
         model_loaded=ml_service.is_loaded,
         environment=settings.environment,
-        version=settings.app_version,
+        version=settings.model_version,
         timestamp=datetime.utcnow(),
     )

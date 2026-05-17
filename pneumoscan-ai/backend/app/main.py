@@ -144,6 +144,7 @@ Currently open. JWT authentication will be added in v2.
         return {
             "name": settings.app_name,
             "version": settings.app_version,
+            "model_version": settings.model_version,
             "status": "running",
             "docs": "/docs",
             "timestamp": datetime.utcnow().isoformat(),
