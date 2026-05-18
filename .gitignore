@@ -12,8 +12,6 @@ node_modules/
 .env
 .env.local
 
-# ML Models
-*.h5
 
 # Mac
 .DS_Store

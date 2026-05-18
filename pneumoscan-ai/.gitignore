@@ -20,7 +20,6 @@ out/
 .env.production
 
 # ML Models (large binary — store in Git LFS or Render disk)
-*.h5
 *.keras
 *.pb
 
